@@ -1,4 +1,4 @@
-<center>### chapter 6 高级IO函数</center>
+### <center>chapter 6 高级IO函数</center>
 
 ###pipe
 创建管道文件, 参数是一个数组,fd[0]和fd[1]分别存放着写端和读端，成功返回0，失败返回-1并设置errno,是读写阻塞的,默认读写容量
@@ -14,10 +14,10 @@
 	assert( ret != -1 );
 ```
 
-	###socketpair
-	双向管道，成功的时候返回0，失败的时候返回-1并上设置errno
-	domain, type, protocol 与socket()函数一样,但domain只能使用AF_UNIX
-	```
+###socketpair
+双向管道，成功的时候返回0，失败的时候返回-1并上设置errno
+domain, type, protocol 与socket()函数一样,但domain只能使用AF_UNIX
+```
 	#include<sys/types.h>
 	#include<sys/socket.h>
 	int socketpair( int domain, int type, int protocol, int fd[2]);
@@ -44,8 +44,8 @@ dup 函数使用当前进程的最小可用的文件描述符存放被拷贝的�
 </br>
 dup2函数与dup函数一样，不同的是返回的不是当前进程最小可用的文件描述符，而是不小于file_descriptor_two的描述符
 ```
-#include<unnistd.h>
-int dup2( int file_descriptor_one, int file_descriptor_two );
+	#include<unnistd.h>
+	int dup2( int file_descriptor_one, int file_descriptor_two );
 
 -----------------------------
 
