@@ -10,7 +10,7 @@
 	fd_out:输出文件描述符
 		|---off_out: 如果fd_out是一个管道文件，那么off_out设为NULL,否则是数据写入的偏移
 	len:指定移动数据的长度
-	flags: 控制数据如何移动的
+	flags: 控制数据如何移动的,多个值一起使用的时候，用按位或进行
 		|== SPLICE_F_MOVE: 给内核一个提示，合适的话，整页移动数据，自2.6.21后，没有效果了
 		|== SPLICE_F_NONBLOCK: 非阻塞的splice操作，但实际效果还会收文件描述符本身的阻塞状态影响
 		|== SPLICE_F_MORE: 给内核一个提示，后续的splice调用将读取更多数据
@@ -42,7 +42,7 @@
 
 int main( int argc, char *argv[] ){
 
-	if( argc < 4 ){
+	if( argc < 3 ){
 		printf("usage: %s ip_number port_number filename\n",basename( argv[0] ));
 		return 1;
 	}
@@ -52,11 +52,6 @@ int main( int argc, char *argv[] ){
 	int port = atoi ( argv[2] );
 	const char* file_name = argv[3];
 
-	//打开文件，并获取属性
-	int filefd = open ( file_name, O_RDONLY );
-	assert( filefd > 0 );
-	struct stat stat_buf;
-	fstat( filefd, &stat_buf );
 
 	//创建socker地址
 	struct sockaddr_in server_addr;
@@ -87,10 +82,18 @@ int main( int argc, char *argv[] ){
 	}
 	else{
 
-		sendfile( connfd, filefd, 0, stat_buf.st_size );
+		int pipefd[2];
+		assert( ret != -1 );
+		//创建管道
+		ret = pipe( pipefd );
+		//将socket中的数据定向到管道写端fd[1]中去
+		ret = splice( connfd, NULL, pipefd[1], NULL, 32768, SPLICE_F_MORE | SPLICE_F_MOVE );
+		assert( ret != -1 );
+		//将管道文件读端fd[0]的数据重定向到socket中去
+		ret = splice( pipefd[0], NULL, connfd, NULL, 32768, SPLICE_F_MORE | SPLICE_F_MORE );
+		assert( ret!= -1 );
 		close( connfd );
 	}
 	close( sockfd );
-
 	return 0;
 }
