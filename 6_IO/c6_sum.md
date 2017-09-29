@@ -1,6 +1,6 @@
 ### <center>chapter 6 高级IO函数</center>
 
-###pipe
+### pipe
 创建管道文件, 参数是一个数组,fd[0]和fd[1]分别存放着写端和读端，成功返回0，失败返回-1并设置errno,是读写阻塞的,默认读写容量
 为65536字节
 
@@ -14,7 +14,7 @@
 	assert( ret != -1 );
 ```
 
-###socketpair
+### socketpair
 双向管道，成功的时候返回0，失败的时候返回-1并上设置errno
 domain, type, protocol 与socket()函数一样,但domain只能使用AF_UNIX
 ```
@@ -28,7 +28,7 @@ domain, type, protocol 与socket()函数一样,但domain只能使用AF_UNIX
 	assert( ret != -1 );
 ```
 
-###dup和dup2函数
+### dup和dup2函数
 dup 函数使用当前进程的最小可用的文件描述符存放被拷贝的文件描述符的内容
 成功返回文件描述符，失败返回-1并设置errno。
 ```
@@ -51,7 +51,7 @@ dup2函数与dup函数一样，不同的是返回的不是当前进程最小可�
 
 ```
 
-###redv和writev
+### redv和writev
 redv将数据从文件描述符读到分散的内存块中
 writev从多块分散的内存块中读取数据并写到一个文件描述符中
 
@@ -79,7 +79,7 @@ writev从多块分散的内存块中读取数据并写到一个文件描述符�
 
 ```
 
-###sendfile
+### sendfile
 在内核中直接在两个文件描述符之间进行数据传递，避免了内核缓冲区和用户缓冲区之间的数据拷贝，成为零拷贝
 in_fd必须是一个指向真实文件的描述符，out_fd必须是一个socket
 
@@ -98,7 +98,7 @@ sendfile( connfd, filefd, 0, stat_buf.st_size );
 
 ```
 
-###splice
+### splice
 文件描述符之间的数据传输，会消耗数据，fd_in或fd_out必须有一个是管道文件描述符
 
 ```
@@ -134,7 +134,7 @@ sendfile( connfd, filefd, 0, stat_buf.st_size );
 		assert( ret != -1 );
 ```
 
-###tee
+### tee
 文件描述符之间的数据传输，不会消耗数据，相当于拷贝。
 fd_in和fd_out必须都是管道文件描述符。tee函数成功是返回在两个文件描述符之间复制的数据数量(字节数)
 返回0表示没有复制任何数据。tee失败时返回-1并设置errno
