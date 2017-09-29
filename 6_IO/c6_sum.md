@@ -42,6 +42,7 @@ dup 函数使用当前进程的最小可用的文件描述符存放被拷贝的�
 
 ```
 </br>
+
 dup2函数与dup函数一样，不同的是返回的不是当前进程最小可用的文件描述符，而是不小于file_descriptor_two的描述符
 ```
 	#include<unnistd.h>
