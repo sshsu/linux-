@@ -132,7 +132,11 @@ void et( epoll_event *events, int number, int epollfd, int listenfd){
                     close( sockfd );
                     break;
                 }
+<<<<<<< HEAD
                 //接收数据时网络中断了，返回0。
+=======
+                //接收数据时网络中断了，返回0
+>>>>>>> e44f4b318766344e72d55441c94a5cb35e8879e7
                 else if( ret == 0 ){
                     close( sockfd );
                 }
